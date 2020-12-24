@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/titleFragment">
+
+    <fragment
+        android:id="@+id/titleFragment"
+        android:name="br.com.espacobistro.bluetoothprinter.ui.title.TitleFragment"
+        android:label="title_fragment"
+        tools:layout="@layout/title_fragment" >
+        <argument
+            android:name="device_address"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_titleFragment_to_selectDeviceFragment"
+            app:destination="@id/selectDeviceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectDeviceFragment"
+        android:name="br.com.espacobistro.bluetoothprinter.ui.bluetooth.SelectDeviceFragment"
+        android:label="select_device_fragment"
+        tools:layout="@layout/select_device_fragment" >
+        <action
+            android:id="@+id/action_selectDeviceFragment_to_titleFragment"
+            app:destination="@id/titleFragment"
+            app:popUpTo="@id/titleFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
