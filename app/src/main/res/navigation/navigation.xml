@@ -10,12 +10,12 @@
         android:name="br.com.espacobistro.bluetoothprinter.ui.title.TitleFragment"
         android:label="title_fragment"
         tools:layout="@layout/title_fragment" >
-        <argument
-            android:name="device_address"
-            app:argType="string" />
         <action
             android:id="@+id/action_titleFragment_to_selectDeviceFragment"
             app:destination="@id/selectDeviceFragment" />
+        <argument
+            android:name="bluetooth_device"
+            app:argType="android.bluetooth.BluetoothDevice"/>
     </fragment>
     <fragment
         android:id="@+id/selectDeviceFragment"

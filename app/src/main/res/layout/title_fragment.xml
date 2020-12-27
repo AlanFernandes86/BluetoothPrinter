@@ -7,24 +7,79 @@
     android:layout_height="match_parent"
     tools:context=".ui.title.TitleFragment">
 
+
+    <ProgressBar
+        android:id="@+id/title_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/lbl_status"
+        android:visibility="invisible"
+        android:indeterminate="true"
+        android:indeterminateBehavior="repeat"
+        />
+
     <TextView
-        android:id="@+id/text_hello"
+        android:id="@+id/lbl_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        android:text="Printer disconnected"
+        app:layout_constraintBottom_toTopOf="@+id/text_toPrint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/title_progress" />
+
+    <EditText
+        android:id="@+id/text_toPrint"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:hint="Text to print"
+        android:inputType="textMultiLine"
+        android:enabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/button_print"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_status"
+        />
+
+    <Button
+        android:id="@+id/button_print"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Print text"
+        android:enabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/button_demo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_toPrint" />
+
+    <Button
+        android:id="@+id/button_demo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Print demo"
+        android:enabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_getPrinter" />
 
     <Button
         android:id="@+id/button_getPrinter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="20dp"
-        android:text="Get printer"/>
+        android:text="Get printer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

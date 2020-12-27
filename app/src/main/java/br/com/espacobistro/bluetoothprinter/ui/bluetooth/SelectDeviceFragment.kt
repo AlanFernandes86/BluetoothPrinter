@@ -4,12 +4,11 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
-import android.graphics.Path
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.fragment.findNavController
@@ -17,14 +16,12 @@ import br.com.espacobistro.bluetoothprinter.R
 
 class SelectDeviceFragment : Fragment() {
 
-    private lateinit var viewModel: SelectDeviceViewModel
     private var bluetoothAdapter: BluetoothAdapter? = null
     private lateinit var pairedDevices: Set<BluetoothDevice>
     private val REQUEST_ENABLE_BLUETOOTH = 1
 
-    companion object {
-        val EXTRA_ADDRESS = "Device_address"
-    }
+    private lateinit var listDevice: ListView
+    private lateinit var progress: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,12 +30,18 @@ class SelectDeviceFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.select_device_fragment, container, false)
 
+        listDevice = root.findViewById(R.id.select_device_list)!!
+        progress = root.findViewById(R.id.device_progress)!!
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
         if(bluetoothAdapter != null) {
-            if (bluetoothAdapter?.isEnabled!!) {
+            if (!bluetoothAdapter?.isEnabled!!) {
                 val enableBluetoothIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BLUETOOTH)
+            }
+            else {
+                pairedDeviceList()
             }
         }
         else{
@@ -51,12 +54,6 @@ class SelectDeviceFragment : Fragment() {
         return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SelectDeviceViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
     private fun pairedDeviceList(){
         pairedDevices = bluetoothAdapter?.bondedDevices?: setOf()
         val list: MutableList<BluetoothDevice> = mutableListOf()
@@ -65,14 +62,13 @@ class SelectDeviceFragment : Fragment() {
             list.add(it)
         }
 
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
-        val listDevice = view?.findViewById<ListView>(R.id.select_device_list)!!
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list.map{it.name})
         listDevice.adapter = adapter
 
         listDevice.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val device = list[position]
-            val address = device.address
-            findNavController().navigate(SelectDeviceFragmentDirections.actionSelectDeviceFragmentToTitleFragment(address))
+            progress.visibility = VISIBLE
+            findNavController().navigate(SelectDeviceFragmentDirections.actionSelectDeviceFragmentToTitleFragment(device))
         }
 
     }
@@ -83,6 +79,7 @@ class SelectDeviceFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK){
                 if(bluetoothAdapter?.isEnabled!!){
                     Toast.makeText(requireContext(), "Bluetooth enabled!", Toast.LENGTH_SHORT).show()
+                    pairedDeviceList()
                 }
                 else {
                     Toast.makeText(requireContext(), "Bluetooth disabled!", Toast.LENGTH_SHORT).show()//Disabled
